@@ -25,6 +25,7 @@ import pygame
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 TURKUS = (66, 140, 120)
+EMPTY = (0,0,0,0)
 
 WIDTH = 640
 HEIGHT = 480
@@ -162,11 +163,16 @@ class Talia:
             pass
 
 karty = Talia()       
+shuffle(karty.cards)
 #%%
+a = dobble (8)
+set(a[0])&set(a[1])
 
+for i in a:
+    if len(set(i)) != 8 and True:
+           print (len(set(i)))
 
-
-
+#%%
 
 prost = pygame.Rect(0, 0, 22, 100)
 prost.size = (12,34)
@@ -203,20 +209,27 @@ prost.h
 #         if sur_occ(rect,sur,app=True) and drawingArea.contains(rect):
 #             break
 #     picture = pygame.transform.rotate(picture, random.randrange(33))
-karta1 = karty.cards[random.randrange(57)]
-karta2 = karty.cards[random.randrange(57)]
-
-karta1.rozmiesc()
-karta2.rozmiesc()
+# karta1 = karty.cards[random.randrange(57)]
+# karta2 = karty.cards[random.randrange(57)]
 
 
 
-for symb in karta1.symbols:
-    cardSurf1.blit(symb.picture, symb.pole.topleft)
+def blit_karta(karta, cardSurf):
     
-for symb in karta2.symbols:
-    cardSurf2.blit(symb.picture, symb.pole.topleft)
-    
+    karta.rozmiesc()
+    cardSurf.fill(EMPTY)
+    for symb in karta.symbols:
+        cardSurf.blit(symb.picture, symb.pole.topleft)
+    return karta
+        
+        
+        
+i = 0
+
+karta1 = blit_karta(karty.cards[i], cardSurf1)
+karta2 = blit_karta(karty.cards[i+1], cardSurf2)
+
+
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -224,10 +237,23 @@ while not done:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos() 
     
+    
+
+    
+    
+    
     T = " "
     for symb in karta1.symbols:
        if symb.pole.collidepoint(pos):
            T += symb.name
+           if symb.name in [i.name for i in karta2.symbols]:
+               T+= "<"
+               i+= 1
+               pos = (-1, -1)
+               karta1 = blit_karta(karty.cards[i], cardSurf1)
+               karta2 = blit_karta(karty.cards[i+1], cardSurf2)
+               
+               
             
 
 
