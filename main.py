@@ -61,7 +61,11 @@ player_image = pygame.transform.scale(player_image, (110, 110))
 
 done = False
 
-game_surf = pygame.surface.Surface((WIDTH, HEIGHT),pygame.SRCALPHA)
+cardSurf1 = pygame.surface.Surface((WIDTH, HEIGHT),pygame.SRCALPHA)
+cardSurf2 = pygame.surface.Surface((WIDTH, HEIGHT),pygame.SRCALPHA)
+lineSurf = pygame.surface.Surface((4, HEIGHT),pygame.SRCALPHA)
+
+
 
 #%%
 def sur_occ(rect, surface = None, app = False):
@@ -99,7 +103,7 @@ class Symbol:
     def skaluj_obraz(self, skala = 1.2):
         self.picture = pygame.transform.smoothscale(self.picture, [int(self.pole.w/skala), int(self.pole.h/skala)])
         self.update_location()
-        print("skaluje")
+        #print("skaluje")
             
         
 
@@ -208,7 +212,10 @@ karta2.rozmiesc()
 
 
 for symb in karta1.symbols:
-    game_surf.blit(symb.picture, symb.pole.topleft)
+    cardSurf1.blit(symb.picture, symb.pole.topleft)
+    
+for symb in karta2.symbols:
+    cardSurf2.blit(symb.picture, symb.pole.topleft)
     
 while not done:
     for event in pygame.event.get():
@@ -235,9 +242,12 @@ while not done:
     
     # Copy image to screen:
     #screen.blit(background_image, background_position)
-    screen.fill(TURKUS) 
+    screen.fill(TURKUS)
+    lineSurf.fill(BLACK)
     
-    screen.blit(game_surf,(0,0))
+    screen.blit(cardSurf1,(0,0))
+    screen.blit(cardSurf2,(WIDTH,0))
+    screen.blit(lineSurf,(WIDTH - lineSurf.get_width()//2, 0))
     
     textsurface = myfont.render(str(pos) + T, False, (0, 0, 0))    
     screen.blit(textsurface,(0,0))
