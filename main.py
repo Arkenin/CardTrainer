@@ -26,8 +26,8 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 TURKUS = (66, 140, 120)
 
-WIDTH = 800
-HEIGHT = 640
+WIDTH = 640
+HEIGHT = 480
 drawingArea = pygame.Rect(0, 0, WIDTH, HEIGHT)
 
 pygame.font.init()
@@ -39,7 +39,7 @@ pos = (-1,-1)
 pygame.init()
 
 # Create an 800x600 sized screen
-screen = pygame.display.set_mode([WIDTH, HEIGHT])
+screen = pygame.display.set_mode([WIDTH*2, HEIGHT])
 
 # This sets the name of the window
 pygame.display.set_caption('Dobble trainer')
@@ -87,7 +87,7 @@ class Symbol:
             self.wczytaj_obraz()
             self.update_location()
         
-    def wczytaj_obraz(self,dirr = "PNG/", skala = 0.3):
+    def wczytaj_obraz(self,dirr = "PNG/", skala = 0.2):
         self.picture = pygame.image.load(dirr+self.name)
         self.picture = pygame.transform.rotozoom(self.picture, random.randrange(360), skala)
         pass
@@ -96,8 +96,8 @@ class Symbol:
             self.pole.w = self.picture.get_width()
             self.pole.h = self.picture.get_height()
             
-    def skaluj_obraz(self, skala = 2):
-        self.picture = pygame.transform.smoothscale(self.picture, [self.pole.w//skala, self.pole.h//skala])
+    def skaluj_obraz(self, skala = 1.2):
+        self.picture = pygame.transform.smoothscale(self.picture, [int(self.pole.w/skala), int(self.pole.h/skala)])
         self.update_location()
         print("skaluje")
             
@@ -161,7 +161,7 @@ karty = Talia()
 #%%
 
 
-karty.cards[1].rozmiesc()
+
 
 
 prost = pygame.Rect(0, 0, 22, 100)
@@ -199,8 +199,15 @@ prost.h
 #         if sur_occ(rect,sur,app=True) and drawingArea.contains(rect):
 #             break
 #     picture = pygame.transform.rotate(picture, random.randrange(33))
+karta1 = karty.cards[random.randrange(57)]
+karta2 = karty.cards[random.randrange(57)]
 
-for symb in karty.cards[0].symbols:
+karta1.rozmiesc()
+karta2.rozmiesc()
+
+
+
+for symb in karta1.symbols:
     game_surf.blit(symb.picture, symb.pole.topleft)
     
 while not done:
@@ -211,7 +218,7 @@ while not done:
             pos = pygame.mouse.get_pos() 
     
     T = " "
-    for symb in karty.cards[0].symbols:
+    for symb in karta1.symbols:
        if symb.pole.collidepoint(pos):
            T += symb.name
             
