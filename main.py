@@ -131,7 +131,7 @@ class Karta:
             self.ilosc_prob = 0
             while True:
                 self.ilosc_prob += 1
-                print(self.ilosc_prob)
+                #print(self.ilosc_prob)
                 if (self.ilosc_prob % 200 == 50):
                     symbol.skaluj_obraz()
                         
@@ -164,13 +164,20 @@ class Talia:
 
 karty = Talia()       
 shuffle(karty.cards)
-#%%
-a = dobble (8)
-set(a[0])&set(a[1])
+#%% Tests function for dobble
+# a = dobble (8)
+# set(a[0])&set(a[1])
 
-for i in a:
-    if len(set(i)) != 8 and True:
-           print (len(set(i)))
+# for i in a:
+#     if len(set(i)) != 8 and True:
+#            print (len(set(i)))
+          
+# for i in a:
+#     for j in a:
+#         if i is j:
+#             continue
+#         if len (set(i)&set(j)) >1:
+#             print(set(i)&set(j))
 
 #%%
 
@@ -186,6 +193,60 @@ prost.x
 prost.y
 prost.w
 prost.h
+
+
+class Measure():
+    
+    def __init__(self):
+        self.start_time = pygame.time.get_ticks()
+        self.lap_time = pygame.time.get_ticks()
+        self.minL = 0
+        self.secL = 0
+        self.milL = 0
+        self.minG = 0
+        self.secG = 0
+        self.milG = 0
+        
+    def __str__(self):
+        self.get_total()
+        return "{}:{}:{}".format(self.minG, self.secG, self.milG)
+        
+        
+    def read_lap(self):
+        tmp = pygame.time.get_ticks()
+        self.milL += tmp - self.lap_time
+        self.lap_time = tmp
+        while self.milL > 1000:
+            self.secL += 1
+            self.milL -= 1000
+  
+        while self.secL > 60:
+            self.minL += 1
+            self.secL -= 60
+            
+        return (self.minL, self.secL, self.milL)
+
+    def get_lap(self):
+        tmp = self.read_lap()
+        self.minL = 0
+        self.secL = 0
+        self.milL = 0
+            
+        return tmp
+                
+    def get_total(self):
+        tmp = pygame.time.get_ticks()
+        self.milG += tmp - self.start_time
+        self.start_time = tmp
+        while self.milG > 1000:
+            self.secG += 1
+            self.milG -= 1000
+  
+        while self.secG > 60:
+            self.minG += 1
+            self.secG -= 60
+            
+        return (self.minG, self.secG, self.milG)
 
 
 #%%
@@ -249,9 +310,18 @@ while not done:
            if symb.name in [i.name for i in karta2.symbols]:
                T+= "<"
                i+= 1
+               print("Karta > {}".format(i))
                pos = (-1, -1)
-               karta1 = blit_karta(karty.cards[i], cardSurf1)
-               karta2 = blit_karta(karty.cards[i+1], cardSurf2)
+               try:
+                   karta1 = blit_karta(karty.cards[i], cardSurf1)
+                   karta2 = blit_karta(karty.cards[i+1], cardSurf2)
+               except:
+                   done = True
+                   
+                   
+    if done:
+        pass #operacje takie jak przedstawienie wyników
+                       
                
                
             
