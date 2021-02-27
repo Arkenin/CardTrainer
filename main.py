@@ -1,6 +1,7 @@
 #The Dobble Algorithm - www.101computing.net/the-dobble-algorithm/
 from random import shuffle
 from dobble import dobble, output_dobble
+from st import st_dev, mean
 import os
 import random
 
@@ -60,7 +61,7 @@ player_image = pygame.transform.scale(player_image, (110, 110))
 
 
 
-done = False
+done = 0
 
 cardSurf1 = pygame.surface.Surface((WIDTH, HEIGHT),pygame.SRCALPHA)
 cardSurf2 = pygame.surface.Surface((WIDTH, HEIGHT),pygame.SRCALPHA)
@@ -247,6 +248,18 @@ class Measure():
             self.secG -= 60
             
         return (self.minG, self.secG, self.milG)
+    
+    def get_total_seconds(self):
+        self.get_total()
+        return 60*self.minG + self.secG
+    
+    def get_lap_seconds(self):
+        tmp = self.read_lap()
+        tmp = 60*self.minL + self.secL + self.milL/1000
+        self.minL = 0
+        self.secL = 0
+        self.milL = 0
+        return tmp
 
 
 #%%
@@ -285,16 +298,19 @@ def blit_karta(karta, cardSurf):
         
         
         
-i = 0
+i = 48
 
 karta1 = blit_karta(karty.cards[i], cardSurf1)
 karta2 = blit_karta(karty.cards[i+1], cardSurf2)
 
+czas = Measure()
 
-while not done:
+stats = []
+
+while done == 0:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            done = True
+            done = -1
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos() 
     
@@ -310,18 +326,31 @@ while not done:
            if symb.name in [i.name for i in karta2.symbols]:
                T+= "<"
                i+= 1
-               print("Karta > {}".format(i))
+               stats.append(czas.get_lap_seconds())
+               print("Karta > {} Time: {:.3f}".format(i, stats[-1]))
                pos = (-1, -1)
                try:
                    karta1 = blit_karta(karty.cards[i], cardSurf1)
                    karta2 = blit_karta(karty.cards[i+1], cardSurf2)
                except:
-                   done = True
+                   done = 1
                    
                    
-    if done:
+    if done == 1:
         pass #operacje takie jak przedstawienie wyników
-                       
+        print("FINALNY CZAS: {:}:{:0>2d}:{:0>3d}".format(*czas.get_total()))
+        
+        srednia = mean(stats)
+        odchylenie = st_dev(stats)
+        print("Średnia: {:.2f} odchylenie standardowe: {:.2f}".format(srednia,odchylenie))
+
+        with open("wyniki.txt", "a") as file:
+            file.write("{:.0f}\t{:.3f}\t{:.3f}\t\n".format(czas.get_total_seconds(),srednia,odchylenie))
+        
+        
+    if done == -1:
+        pass #operacje takie jak przedstawienie wyników
+        print("GRA ZAKOŃCZONA PRZED KOŃCEM: {:}:{:0>2d}:{:0>3d}".format(*czas.get_total()))         
                
                
             
