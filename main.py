@@ -4,22 +4,6 @@ from dobble import dobble, output_dobble
 from st import st_dev, mean
 import os
 import random
-
-
-
-
-
-"""
- Sample Python/Pygame Programs
- Simpson College Computer Science
- http://programarcadegames.com/
- http://simpson.edu/computer-science/
-
- Explanation video: http://youtu.be/4YqIKncMJNs
- Explanation video: http://youtu.be/ONAK8VZIcI4
- Explanation video: http://youtu.be/_6c4o41BIms
-"""
-
 import pygame
 
 # Define some colors
@@ -165,20 +149,7 @@ class Talia:
 
 karty = Talia()       
 shuffle(karty.cards)
-#%% Tests function for dobble
-# a = dobble (8)
-# set(a[0])&set(a[1])
 
-# for i in a:
-#     if len(set(i)) != 8 and True:
-#            print (len(set(i)))
-          
-# for i in a:
-#     for j in a:
-#         if i is j:
-#             continue
-#         if len (set(i)&set(j)) >1:
-#             print(set(i)&set(j))
 
 #%%
 
